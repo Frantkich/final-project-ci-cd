@@ -1,0 +1,46 @@
+concurrent = 1
+check_interval = 0
+shutdown_timeout = 0
+
+[session_server]
+  session_timeout = 1800
+
+[[runners]]
+  name = "gitlab-runner-docker"
+  url = "http://gitlab/"
+  id = 1
+  token = "eQhXa_sU1oKCx5NzRWkP"
+  token_obtained_at = 2023-04-28T10:25:28Z
+  token_expires_at = 0001-01-01T00:00:00Z
+  executor = "docker"
+  [runners.docker]
+    tls_verify = false
+    image = "alpine:latest"
+    privileged = true
+    disable_entrypoint_overwrite = false
+    oom_kill_disable = false
+    disable_cache = false
+    volumes = ["/cache"]
+    network_mode = "gitlab-network"
+    shm_size = 0
+
+[[runners]]
+  name = "gitlab-runner-shell"
+  url = "http://gitlab/"
+  id = 2
+  token = "JWwxu5sTdMY2jixGoRxN"
+  token_obtained_at = 2023-04-28T10:25:38Z
+  token_expires_at = 0001-01-01T00:00:00Z
+  executor = "docker"
+  [runners.cache]
+    MaxUploadedArchiveSize = 0
+  [runners.docker]
+    tls_verify = false
+    image = "alpine:latest"
+    privileged = true
+    disable_entrypoint_overwrite = false
+    oom_kill_disable = false
+    disable_cache = false
+    volumes = ["/cache"]
+    network_mode = "gitlab-network"
+    shm_size = 0

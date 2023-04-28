@@ -1,0 +1,21 @@
+gitlab-runner register \
+  --non-interactive \
+  --url "http://gitlab/" \
+  --registration-token "huPJ2qgmA2j2KLiyHZ5X" \
+  --description "gitlab-runner-docker" \
+  --tag-list "runner,docker" \
+  --executor "docker" \
+  --docker-image alpine:latest \
+  --docker-privileged \
+  --docker-network-mode gitlab-network
+
+gitlab-runner register \
+  --non-interactive \
+  --url "http://gitlab/" \
+  --registration-token "huPJ2qgmA2j2KLiyHZ5X" \
+  --description "gitlab-runner-shell" \
+  --tag-list "runner,shell" \
+  --executor "docker" \
+  --docker-image alpine:latest \
+  --docker-privileged \
+  --docker-network-mode gitlab-network

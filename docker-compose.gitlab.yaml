@@ -1,0 +1,61 @@
+version: '3.7'
+
+services:
+  gitlab-instance:
+    image: 'gitlab/gitlab-ce:latest'
+    restart: always
+    hostname: 'gitlab'
+    container_name: gitlab
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url 'http://gitlab'
+    ports:
+      - '8080:80'
+      - '8443:443'
+    volumes:
+      - './gitlab/config:/etc/gitlab'
+      - './gitlab/logs:/var/log/gitlab'
+      - './gitlab/data:/var/opt/gitlab'
+      - '../../Pipeline-CI-CD:/usr/src/udagram'
+    networks:
+      - gitlab-net
+  
+  gitlab-runner-docker:
+    image: gitlab/gitlab-runner:alpine
+    container_name: gitlab-runner-docker
+    restart: always
+    depends_on:
+      - gitlab-instance
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - './gitlab/gitlab-runner:/etc/gitlab-runner'
+    networks:
+      - gitlab-net
+
+  gitlab-runner-shell:
+    image: gitlab/gitlab-runner:alpine
+    container_name: gitlab-runner-shell
+    restart: always
+    depends_on:
+      - gitlab-instance
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - './gitlab/gitlab-runner:/etc/gitlab-runner'
+    networks:
+      - gitlab-net
+
+  dev-server:
+    build: dev-server
+    command: tail -F anything
+    networks:
+      - gitlab-net
+
+  prod-server:
+    build: prod-server
+    command: tail -F anything
+    networks:
+      - gitlab-net
+      
+networks:
+  gitlab-net:
+    name: gitlab-network
